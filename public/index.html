@@ -18,16 +18,19 @@
   </head>
 
   <body>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
+    <div style="color: #fff">
+      <h1>Hello</h1>
+      <h2>Hello</h2>
+      <h3>Hello</h3>
+      <h4>Hello</h4>
+    </div>
     <script src="../dist/main.bundle.js"></script>
     <script>
       window.onload = function() {
         var dap = new Dap({
-          // el: document.getElementById("app"),
           zoomType: "y",
-          backgroundImage:
-            "https://datav.oss-cn-hangzhou.aliyuncs.com/uploads/images/51182f91cfa0fd0b3c8754d7ca23e877.png"
+          backgroundColor: "#333",
+          backgroundImage: "./bg.png"
         });
       };
     </script>

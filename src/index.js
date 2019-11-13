@@ -1,6 +1,5 @@
 import debounce from "lodash/debounce";
 import { addListener, removeListener } from "resize-detector";
-import BackgroundImage from "./bg.png";
 
 const version = "0.0.1";
 let idBase = new Date() - 0;
@@ -48,7 +47,8 @@ export class Dap {
       width: opts.width || 1920,
       height: opts.height || 1080,
       zoomType: opts.zoomType || "x", // 缩放类型 x等比缩放宽度铺满、y等比缩放高度铺满、z全屏铺满
-      backgroundImage: opts.backgroundImage || BackgroundImage
+      backgroundImage: opts.backgroundImage,
+      backgroundColor: opts.backgroundColor || "#0e2a43"
     };
 
     // ----------------
@@ -68,7 +68,15 @@ export class Dap {
 
   resize() {
     let { opts } = this;
-    let { el, wrapEl, width, height, zoomType, backgroundImage } = opts;
+    let {
+      el,
+      wrapEl,
+      width,
+      height,
+      zoomType,
+      backgroundImage,
+      backgroundColor
+    } = opts;
     let wrapRect = window.getComputedStyle(wrapEl),
       resetH = 1080, // 基准高度
       resetW = (width * resetH) / height,
@@ -76,27 +84,26 @@ export class Dap {
       scaleY = pxToNumber(wrapRect.height) / resetH, // 缩放比例
       marginX = (pxToNumber(wrapRect.width) - resetW * scaleY) / 2; // 水平居中
 
-    el.style.width = resetW + "px";
-    el.style.height = resetH + "px";
-    el.style.transformOrigin = "left top 0px";
-
     if (zoomType === "x") {
       el.style.transform = "scale(" + scaleX + ")";
-      el.style.background = 'url("' + backgroundImage + '") 0% 0% / 100%';
+      el.style.background = "0% 0% / 100%";
     } else if (zoomType === "y") {
       el.style.transform = "scale(" + scaleY + ")";
       el.style.marginLeft = marginX + "px";
       el.style.background =
-        'url("' +
-        backgroundImage +
-        '") ' +
-        marginX +
-        "px top / " +
-        (scaleY * 100) / scaleX +
-        "% 100%";
+        marginX + "px top / " + (scaleY * 100) / scaleX + "% 100%";
     } else {
       el.style.transform = "scale(" + scaleX + ", " + scaleY + ")";
-      el.style.background = 'url("' + backgroundImage + '") 0% 0% / 100% 100%';
+      el.style.background = "0% 0% / 100% 100%";
+    }
+
+    el.style.width = resetW + "px";
+    el.style.height = resetH + "px";
+    el.style.transformOrigin = "left top 0px";
+    el.style.backgroundColor = backgroundColor;
+    el.style.backgroundRepeat = "no-repeat";
+    if (backgroundImage) {
+      el.style.backgroundImage = `url(${backgroundImage})`;
     }
   }
 
